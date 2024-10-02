@@ -7,13 +7,14 @@ endif ()
 
 project(marian CXX C)
 set(CMAKE_CXX_STANDARD 17)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_ARCH native CACHE STRING "Compile for this CPU architecture.")
 
 # Custom CMake options
 option(COMPILE_CPU "Compile CPU version" ON)
 option(COMPILE_CUDA "Compile GPU version" ON)
-option(COMPILE_EXAMPLES "Compile examples" OFF)
+option(COMPILE_EXAMPLES "Compile examples" ON)
 option(COMPILE_SERVER "Compile marian-server" OFF)
 option(COMPILE_TESTS "Compile tests" OFF)
 if(APPLE)
@@ -648,6 +649,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/common/build_info.cpp.in
 # to be able to check if this is a CMake-based compilation, which always adds
 # build-info option, even on Windows.
 add_definitions(-DBUILD_INFO_AVAILABLE=1)
+
+if(WIN32)
+  add_definitions("/D_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS")
+endif()
 
 # Compile source files
 include_directories(${marian_SOURCE_DIR}/src)
